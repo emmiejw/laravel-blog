@@ -18,7 +18,8 @@ class Post extends Model
         'title',
         'featured',
         'content',
-        'category_id'
+        'category_id',
+        'slug'
     ];
 
     public function getFeaturedAttribute($featured)

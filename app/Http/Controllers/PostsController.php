@@ -53,11 +53,12 @@ class PostsController extends Controller
             'title' =>$request->title,
             'featured' =>'uploads/posts/'.$featured_new_name,
             'content' =>$request->content,
-            'category_id' =>$request->category_id
+            'category_id' =>$request->category_id,
+            'slug' => str_slug($request->title)
         ]);
         
         Session::flash('success','You have created a new Post');
-        
+
         return redirect()->route('post.index');
     }
 
@@ -82,7 +83,7 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
         return view('admin.posts.edit')->with('post', $post)
-                                      ->with('categories', Category::all());
+                                     ->with('categories', Category::all());
                                       
     }
 
@@ -98,23 +99,23 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            // 'category_id' => 'required'
+            'category_id' => 'required'
         ]);
         $post = Post::find($id);
+
         if($request->hasFile('featured'))
         {
-            // $featured = $request->featured;
-            // $featured_new_name = time() . $featured->getClientOriginalName();
-            // $featured->move('uploads/posts', $featured_new_name);
-            // $post->featured = 'uploads/posts/'.$featured_new_name;
-            
+            $featured = $request->featured;
+            $featured_new_name = time() . $featured->getClientOriginalName();
+            $featured->move('uploads/posts', $featured_new_name);
+            $post->featured = 'uploads/posts/'.$featured_new_name;  
         }
         $post->title = $request->title;
         $post->content = $request->content;
-        // $post->category_id = $request->category_id;
+        $post->category_id = $request->category_id;
         $post->save();
-        // $post->tags()->sync($request->tags);
-        // Session::flash('success', 'Post updated successfully.');
+
+        Session::flash('success', 'Post updated successfully.');
         return redirect()->route('post.index');
     }
 
@@ -126,6 +127,34 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        $post->delete();
+        Session::flash('warning', 'The post was just trashed.');
+        return redirect()->back();
+    }
+
+    public function trashed()
+    {
+        $posts = Post::onlyTrashed()->get();
+
+        return view('admin.posts.trashed')->with('posts', $posts);
+    }
+
+    public function kill($id)
+    {
+        $post = Post::withTrashed()->where('id', $id)->first();
+        
+        $post->forceDelete();
+        Session::flash('warning', 'The Post was deleted permanently.');
+        return redirect()->back();
+    }
+
+    public function restore($id)
+    {
+        $post = Post::withTrashed()->where('id', $id)->first();
+        $post->restore();
+        Session::flash('success', 'The Post has restored successfully.');
+        return redirect()->route('post.index');
     }
 }
+
