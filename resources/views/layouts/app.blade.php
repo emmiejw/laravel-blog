@@ -93,6 +93,12 @@
                         <li class="list-group-item">
                           <a href="{{ route('category.create') }}">Create new Category</a>
                         </li>
+                        <li class="list-group-item">
+                          <a href="{{ route('tag.index') }}">Tags</a>
+                        </li>
+                        <li class="list-group-item">
+                          <a href="{{ route('tag.create') }}">Create new Tag</a>
+                        </li>
                     </ul>
                 </div>
                 @endif

@@ -115,7 +115,7 @@ class PostsController extends Controller
         $post->category_id = $request->category_id;
         $post->save();
 
-        Session::flash('success', 'Post updated successfully.');
+        Session::flash('info', 'Post updated successfully.');
         return redirect()->route('post.index');
     }
 
