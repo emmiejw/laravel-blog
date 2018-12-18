@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -29,8 +30,7 @@ class Post extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function tags()
-    {
-        $this->belongsToMany(App\Tag);
+    public function tags() {
+        return $this->belongsToMany('App\Tag');
     }
 }

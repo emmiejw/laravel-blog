@@ -7,7 +7,7 @@
         <br>
         <center>
             <div class="col-10 text-center">
-                <table class="table table-striped">
+                <table class="table">
                         <thead>
                             <tr>
                                 <th>Name</th>

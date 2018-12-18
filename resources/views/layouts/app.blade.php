@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
@@ -9,13 +10,17 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Styles -->
+    <link href="/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
+    @yield('styles')
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
+   
+
 </head>
 <body>
     <div id="app">
@@ -70,56 +75,75 @@
             </div>
         </nav>
 <br>
-        <div class="container">
-            <div class="row">
-                @if(Auth::check())
+
+<div class="container">
+        <div class="row">
+            @if(Auth::check())
                 <div class="col-lg-4">
                     <ul class="list-group">
                         <li class="list-group-item">
-                          <a href="{{ route('home') }}">Home</a>
+                            <a href="{{ route('home') }}">Home</a>
                         </li>
                         <li class="list-group-item">
-                          <a href="{{ route('post.index') }}">Posts</a>
+                            <a href="{{ route('user.profile') }}">My profile</a>
                         </li>
                         <li class="list-group-item">
-                           <a href="{{ route('post.create') }}">Create new Post</a>
+                            <a href="{{ route('settings') }}">Site Settings</a>
+                        </li>
+                        @if(Auth::user()->admin)
+                            <li class="list-group-item">
+                                <a href="{{ route('users') }}">Users</a>
+                            </li>
+
+                            <li class="list-group-item">
+                                <a href="{{ route('user.create') }}">New user</a>
+                            </li>
+                        @endif
+                        <li class="list-group-item">
+                            <a href="{{ route('post.index') }}">All posts</a>
                         </li>
                         <li class="list-group-item">
-                           <a href="{{ route('post.trashed') }}">All Trashed Posts</a>
-                        </li>                         
-                        <li class="list-group-item">
-                          <a href="{{ route('categories') }}">Categories</a>
+                            <a href="{{ route('post.create') }}">Create new post</a>
                         </li>
                         <li class="list-group-item">
-                          <a href="{{ route('category.create') }}">Create new Category</a>
+                            <a href="{{ route('post.trashed') }}">All trashed posts</a>
                         </li>
                         <li class="list-group-item">
-                          <a href="{{ route('tag.index') }}">Tags</a>
+                            <a href="{{ route('categories') }}">Categories</a>
                         </li>
                         <li class="list-group-item">
-                          <a href="{{ route('tag.create') }}">Create new Tag</a>
+                            <a href="{{ route('category.create') }}">Create new category</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('tag.index') }}">Tags</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('tag.create') }}">Create tag</a>
                         </li>
                     </ul>
                 </div>
-                @endif
-                <div class="col-lg-8">
-                    @yield('content')
-                </div>
-            </div> 
+            @endif
+            <div class="col-lg-8">
+                @yield('content')
+            </div>
+        </div>
     </div>
+</div>
 
-<script src="/js/app.js"></script> 
-<script src="{{asset('js/toastr.min.js')}}"></script>
+
+
+<!-- Scripts -->
+<script src="/js/app.js"></script>
+<script src="{{ asset('js/toastr.min.js') }}"></script>
 <script>
-    @if(Session::has('success'))
-        toastr.success("{{ Session::get('success') }}")
-    @endif
-    @if(Session::has('info'))
-        toastr.info("{{ Session::get('info') }}")
-    @endif
-    @if(Session::has('warning'))
-        toastr.warning("{{ Session::get('warning') }}")
-    @endif
+        @if(Session::has('success'))
+            toastr.success("{{ Session::get('success') }}")
+        @endif
+        @if(Session::has('info'))
+            toastr.info("{{ Session::get('info') }}")
+        @endif
 </script>
+
+@yield('scripts')
 </body>
 </html>

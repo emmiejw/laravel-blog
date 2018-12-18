@@ -16,7 +16,7 @@
             </div>
             <div class="form-group">
                 <div class="text-center">
-                     <button class="btn btn-success" type="submit" >Add Category</button>
+                     <button class="btn btn-primary" type="submit" >Add Category</button>
                 </div>
             </div>
             </form>

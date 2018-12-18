@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Category;
+use App\Tag;
 use Session;
 
 
@@ -27,7 +28,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create')->with('categories', Category::all()); 
+        return view('admin.posts.create')->with('categories', Category::all()) 
+                                       ->with('tags' , Tag::all());
     }
 
     /**
@@ -39,10 +41,11 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|max:255',
+            'title' => 'required',
             'featured' => 'required|image',
             'content' => 'required',
-            'category_id' => 'required'
+            'category_id' => 'required',
+            'tags' => 'required'
         ]);
 
         $featured = $request->featured;
@@ -50,16 +53,16 @@ class PostsController extends Controller
         $featured->move('uploads/posts', $featured_new_name);
 
         $post = Post::create([
-            'title' =>$request->title,
-            'featured' =>'uploads/posts/'.$featured_new_name,
-            'content' =>$request->content,
-            'category_id' =>$request->category_id,
-            'slug' => str_slug($request->title)
+            'title' => $request->title,
+            'content' => $request->content,
+            'featured' => 'uploads/posts/' . $featured_new_name,
+            'category_id' => $request->category_id,
+            'slug' => str_slug($request->title),
+            
         ]);
-        
-        Session::flash('success','You have created a new Post');
-
-        return redirect()->route('post.index');
+        $post->tags()->attach($request->tags);
+        Session::flash('success', 'Post created succesfully.');
+        return redirect()->back();
     }
 
     /**
@@ -83,8 +86,8 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
         return view('admin.posts.edit')->with('post', $post)
-                                     ->with('categories', Category::all());
-                                      
+                                     ->with('categories', Category::all())
+                                     ->with('tags' , Tag::all());
     }
 
     /**
@@ -114,6 +117,8 @@ class PostsController extends Controller
         $post->content = $request->content;
         $post->category_id = $request->category_id;
         $post->save();
+
+        $post->tags()->sync($request->tags);
 
         Session::flash('info', 'Post updated successfully.');
         return redirect()->route('post.index');
