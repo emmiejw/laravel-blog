@@ -7,9 +7,24 @@ Route::get('/testpost', function(){
 Route::get('/testcat', function(){
     return App\Post::find(1)->category;
 });
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [
+    'uses' => 'FrontEndController@index',
+    'as' => 'index'
+]);
+
+Route::get('/post/{id}', [
+    'uses' => 'FrontEndController@singlePost',
+    'as' => 'post.single'
+]);
+
+Route::get('/category/{id}', [
+    'uses' => 'FrontEndController@category',
+    'as' => 'category.single'
+]);
+Route::get('/tag/{id}', [
+    'uses' => 'FrontEndController@tag',
+    'as' => 'tag.single'
+]);
 
 Auth::routes();
 

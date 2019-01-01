@@ -57,7 +57,7 @@ class PostsController extends Controller
             'content' => $request->content,
             'featured' => 'uploads/posts/' . $featured_new_name,
             'category_id' => $request->category_id,
-            'slug' => str_slug($request->title),
+            'slug' => str_slug($request->title, '-'),
             
         ]);
         $post->tags()->attach($request->tags);
@@ -102,7 +102,8 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            'category_id' => 'required'
+            'category_id' => 'required',
+            'slug' => str_slug($request->title, '-'),
         ]);
         $post = Post::find($id);
 
@@ -116,6 +117,7 @@ class PostsController extends Controller
         $post->title = $request->title;
         $post->content = $request->content;
         $post->category_id = $request->category_id;
+        $post->slug = $request->title;
         $post->save();
 
         $post->tags()->sync($request->tags);
