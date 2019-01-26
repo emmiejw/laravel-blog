@@ -64,35 +64,39 @@
                                     </div>
                               </div>
 
-                              
+                              <div class="socials text-center">
+                                    <div class="addthis_inline_share_toolbox"></div>
+                              </div>
 
                         </article>
 
                         <div class="blog-details-author">
 
-                              <div class="blog-details-author-thumb rounded-circle" >
-                                    <img src="{{ asset($user->profile->avatar) }}" alt="Author" style="height:140px; width:150px;">
+                              <div class="blog-details-author-thumb">
+                                    <img src="{{ asset($post->user->profile->avatar) }}" alt="Author" style="height:120px; width:120px;">
                               </div>
 
                               <div class="blog-details-author-content">
                                     <div class="author-info">
-                                    <h5 class="author-name">{{ $user->name }}</h5>
+                                    <h5 class="author-name">{{ $post->user->name }}</h5>
                                     </div>
-                                    <p class="text">{{ $user->profile->about }}
+                                    <p class="text">{{ $post->user->profile->about }}
                                     </p>
                                     <div class="socials">
 
-                                    <a href="{{ $user->profile->facebook }}" class="social__item" target="_blank">
+                                    <a href="{{ $post->user->profile->facebook }}" class="social__item" target="_blank">
                                           <img src="{{ asset('app/svg/circle-facebook.svg') }}" alt="facebook">
                                     </a>
 
-                                    <a href="{{ $user->profile->youtube }}" class="social__item" target="_blank">
+                                    <a href="{{ $post->user->profile->youtube }}" class="social__item" target="_blank">
                                           <img src="{{ asset('app/svg/youtube.svg') }}" alt="youtube">
                                     </a>
 
                                     </div>
                               </div>
                         </div>
+
+
 
                         <div class="pagination-arrow">
 
@@ -132,11 +136,11 @@
                                     </div>
                               </div>
 
-                              {{-- @include('includes.disqus') --}}
+                              @include('admin.includes.disqus')
                         </div>
 
-                        
-
+                        <br>
+                        <br>
 
                         </div>
 
@@ -170,5 +174,20 @@
                   </main>
             </div>
       </div>
+      <style>
+      
+      img {
+        width: 500px;
+        height: 300px;
+        -webkit-transition: width 2s, height 2s, -webkit-transform 2s; /* Safari */
+        transition: width 2s, height 2s, transform 2s;
+      }
 
+      img:hover {
+        width: 900px;
+        height: 600px;
+        -webkit-transform: rotate(360deg); /* Safari */
+        transform: rotate(360deg);
+      }
+      </style>
 @endsection

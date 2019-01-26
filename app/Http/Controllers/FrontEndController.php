@@ -39,8 +39,6 @@ class FrontEndController extends Controller
                              ->with('title', $post->title)
                              ->with('settings', Setting::first())
                              ->with('categories', Category::take(5)->get())
-                             ->with('user', User::first())
-                             ->with('profile', Profile::first())
                              ->with('next', Post::find($next_id))
                              ->with('prev', Post::find($prev_id))
                              ->with('tags', Tag::all());

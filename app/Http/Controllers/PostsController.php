@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Auth;
 use App\Category;
 use App\Tag;
 use Session;
@@ -18,7 +19,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-       return view('admin.posts.index')->with('posts' , Post::all()); 
+        
+       return view('admin.posts.index')->with('posts' , Post::whereUserId(Auth::id())->get()); 
     }
 
     /**
@@ -58,6 +60,7 @@ class PostsController extends Controller
             'featured' => 'uploads/posts/' . $featured_new_name,
             'category_id' => $request->category_id,
             'slug' => str_slug($request->title, '-'),
+            'user_id' => Auth::id()
             
         ]);
         $post->tags()->attach($request->tags);
@@ -136,7 +139,7 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
         $post->delete();
-        Session::flash('warning', 'The post was just trashed.');
+        Session::flash('warning', 'The post was just been trashed.');
         return redirect()->back();
     }
 
